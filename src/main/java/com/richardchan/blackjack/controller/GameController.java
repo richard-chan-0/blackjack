@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.richardchan.blackjack.model.Game;
-import com.richardchan.blackjack.service.GameService;
+import com.richardchan.blackjack.service.GameManagementService;
 
 import java.util.Collection;
 
@@ -17,9 +17,9 @@ import java.util.Collection;
 @RequestMapping("/games")
 public class GameController {
 
-    private GameService service;
+    private GameManagementService service;
 
-    public GameController(GameService service) {
+    public GameController(GameManagementService service) {
         this.service = service;
     }
 

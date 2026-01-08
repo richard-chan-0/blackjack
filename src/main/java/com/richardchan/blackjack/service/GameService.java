@@ -1,38 +1,27 @@
 package com.richardchan.blackjack.service;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+
+import com.richardchan.blackjack.model.Deck;
 import com.richardchan.blackjack.model.Game;
-import com.richardchan.blackjack.exception.GameNotFoundException;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
-import java.util.HashMap;
 
 @Service
 public class GameService {
-    private Map<String, Game> games = new HashMap<>();
-    private static final Logger logger = LoggerFactory.getLogger(GameService.class);
+    // start state deal cards to player and dealer - done
+    // total up card values for player and dealer - done
+    // hit or stand
+    private CardCalculatorService calculator;
 
-    public Game createGame() {
-        String gameId = UUID.randomUUID().toString();
-        Game game = new Game(gameId);
-        games.put(gameId, game);
-        return game;
+    public GameService(CardCalculatorService service) {
+        calculator = service;
     }
 
-    public Game getGame(String gameId) {
-        logger.info("Fetching game");
-        Game game = games.get(gameId);
-        if (game == null) {
-            throw new GameNotFoundException("Game not found: " + gameId);
-        }
-        return game;
+    public void dealInitialCards(Game game) {
+        Deck deck = game.getDeck();
+        game.addPlayerCard(deck.drawCard());
+        game.addDealerCard(deck.drawCard());
+        game.addPlayerCard(deck.drawCard());
+        game.addDealerCard(deck.drawCard());
+        game.setPlayerTotal(calculator.calculateCardValues(game.getPlayerCards()));
     }
-
-    public Collection<Game> getGames() {
-        return games.values();
-    }
-
 }
