@@ -3,6 +3,8 @@ package com.richardchan.blackjack.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Game {
     private String gameId;
     private List<String> playerCards;
@@ -12,7 +14,10 @@ public class Game {
     private GameResult result;
     private boolean isGameOver;
 
-    public Game(String gameId) {
+    @JsonIgnore
+    private Deck deck;
+
+    public Game(String gameId, Deck deck) {
         this.gameId = gameId;
         playerCards = new ArrayList<>();
         dealerCards = new ArrayList<>();
@@ -20,6 +25,7 @@ public class Game {
         dealerTotal = 0;
         result = GameResult.IN_PROGRESS;
         isGameOver = false;
+        this.deck = deck;
     }
 
     public String getGameId() {
@@ -50,20 +56,20 @@ public class Game {
         return isGameOver;
     }
 
-    public void addCardToPlayerTotal(int card) {
-        this.playerTotal += card;
-    }
-
-    public void addCardToDealerTotal(int card) {
-        this.dealerTotal += card;
-    }
-
     public void setResult(GameResult result) {
         this.result = result;
     }
 
     public void setGameOver(boolean isGameOver) {
         this.isGameOver = isGameOver;
+    }
+
+    public void setPlayerTotal(int playerTotal) {
+        this.playerTotal = playerTotal;
+    }
+
+    public void setDealerTotal(int dealerTotal) {
+        this.dealerTotal = dealerTotal;
     }
 
     public void addPlayerCard(String card) {
@@ -73,4 +79,9 @@ public class Game {
     public void addDealerCard(String card) {
         dealerCards.add(card);
     }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
 }
