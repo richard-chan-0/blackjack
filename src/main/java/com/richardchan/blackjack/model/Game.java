@@ -17,7 +17,7 @@ public class Game {
     @JsonIgnore
     private Deck deck;
 
-    public Game(String gameId) {
+    public Game(String gameId, Deck deck) {
         this.gameId = gameId;
         playerCards = new ArrayList<>();
         dealerCards = new ArrayList<>();
@@ -25,7 +25,7 @@ public class Game {
         dealerTotal = 0;
         result = GameResult.IN_PROGRESS;
         isGameOver = false;
-        deck = new Deck();
+        this.deck = deck;
     }
 
     public String getGameId() {

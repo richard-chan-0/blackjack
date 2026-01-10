@@ -3,6 +3,8 @@ package com.richardchan.blackjack.service;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+
+import com.richardchan.blackjack.model.Deck;
 import com.richardchan.blackjack.model.Game;
 import com.richardchan.blackjack.exception.GameNotFoundException;
 import java.util.Collection;
@@ -22,7 +24,8 @@ public class GameManagementService {
 
     public Game createGame() {
         String gameId = UUID.randomUUID().toString();
-        Game game = new Game(gameId);
+        Deck deck = new Deck();
+        Game game = new Game(gameId, deck);
         gameService.dealInitialCards(game);
         games.put(gameId, game);
         return game;
