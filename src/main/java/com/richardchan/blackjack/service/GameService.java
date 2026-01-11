@@ -4,12 +4,10 @@ import org.springframework.stereotype.Service;
 
 import com.richardchan.blackjack.model.Deck;
 import com.richardchan.blackjack.model.Game;
+import com.richardchan.blackjack.model.GameResult;
 
 @Service
 public class GameService {
-    // start state deal cards to player and dealer - done
-    // total up card values for player and dealer - done
-    // hit or stand
     private CardCalculatorService calculator;
 
     public GameService(CardCalculatorService service) {
@@ -23,5 +21,31 @@ public class GameService {
         game.addPlayerCard(deck.drawCard());
         game.addDealerCard(deck.drawCard());
         game.setPlayerTotal(calculator.calculateCardValues(game.getPlayerCards()));
+    }
+
+    public Game hit(Game game) {
+        game.addPlayerCard(game.getDeck().drawCard());
+
+        int score = calculator.calculateCardValues(game.getPlayerCards());
+        game.setPlayerTotal(score);
+        if (calculator.isBust(score)) {
+            game.setGameOver(true);
+            game.setResult(GameResult.BUST);
+        }
+        return game;
+    }
+
+    public Game stand(Game game) {
+        game.setGameOver(true);
+        int dealerTotal = game.getDealerTotal();
+        while (dealerTotal < 17) {
+            game.addDealerCard(game.getDeck().drawCard());
+            int newDeckTotal = calculator.calculateCardValues(game.getDealerCards());
+            game.setDealerTotal(newDeckTotal);
+            dealerTotal = newDeckTotal;
+        }
+        int playerTotal = game.getPlayerTotal();
+        game.setResult(calculator.getWinner(dealerTotal, playerTotal));
+        return game;
     }
 }
