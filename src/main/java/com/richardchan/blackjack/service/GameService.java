@@ -44,8 +44,12 @@ public class GameService {
             game.setDealerTotal(newDeckTotal);
             dealerTotal = newDeckTotal;
         }
-        int playerTotal = game.getPlayerTotal();
-        game.setResult(calculator.getWinner(dealerTotal, playerTotal));
+        if (calculator.isBust(dealerTotal)) {
+            game.setResult(GameResult.WIN);
+        } else {
+            int playerTotal = game.getPlayerTotal();
+            game.setResult(calculator.getWinner(dealerTotal, playerTotal));
+        }
         return game;
     }
 }

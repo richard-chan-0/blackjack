@@ -22,8 +22,7 @@ public enum FaceCard {
     }
 
     public static boolean isFaceCard(String card) {
-        String rank = card.substring(0, card.length() - 1);
-        return rank.equals("J") || rank.equals("Q") || rank.equals("K");
+        return card.equals("J") || card.equals("Q") || card.equals("K");
     }
 
     public static int getFaceCardValue() {

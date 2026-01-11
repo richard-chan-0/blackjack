@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.richardchan.blackjack.model.Deck;
 import com.richardchan.blackjack.model.Game;
-import com.richardchan.blackjack.model.GameResult;
+import com.richardchan.blackjack.exception.GameException;
 import com.richardchan.blackjack.exception.GameNotFoundException;
 import java.util.Collection;
 import java.util.Map;
@@ -24,6 +24,7 @@ public class GameManagementService {
     }
 
     public Game createGame() {
+        logger.info("Setting up new game");
         String gameId = UUID.randomUUID().toString();
         Deck deck = new Deck();
         Game game = new Game(gameId, deck);
@@ -38,6 +39,9 @@ public class GameManagementService {
         if (game == null) {
             throw new GameNotFoundException("Game not found: " + gameId);
         }
+        if (game.isGameOver()) {
+            throw new GameException("game is over, no further moves allowed");
+        }
         return game;
     }
 
@@ -48,16 +52,12 @@ public class GameManagementService {
     public Game hitGame(String gameId) {
         Game game = this.getGame(gameId);
         gameService.hit(game);
-        if (game.getResult().equals(GameResult.BUST)) {
-            cleanGame(gameId);
-        }
         return game;
     }
 
     public Game standGame(String gameId) {
         Game game = this.getGame(gameId);
         gameService.stand(game);
-        cleanGame(gameId);
         return game;
     }
 

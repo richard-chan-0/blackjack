@@ -47,13 +47,13 @@ public class GameController {
 
     @PostMapping("/{gameId}/hit")
     public ResponseEntity<Game> postHit(@PathVariable String gameId) {
-        service.hitGame(gameId);
-        return ResponseEntity.ok().body(service.getGame(gameId));
+        Game game = service.hitGame(gameId);
+        return ResponseEntity.ok().body(game);
     }
 
     @PostMapping("/{gameId}/stand")
     public ResponseEntity<Game> postStand(@PathVariable String gameId) {
-        service.standGame(gameId);
-        return ResponseEntity.ok().body(service.getGame(gameId));
+        Game game = service.standGame(gameId);
+        return ResponseEntity.ok().body(game);
     }
 }

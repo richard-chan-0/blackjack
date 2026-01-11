@@ -21,7 +21,7 @@ public class CardCalculatorService {
             int aceValue = total + 11 >= TOP_SCORE ? 1 : 11;
             return aceValue;
         } else {
-            return 0;
+            return Integer.parseInt(card);
         }
     }
 
