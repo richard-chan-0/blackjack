@@ -7,19 +7,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.richardchan.blackjack.model.FaceCard;
+import com.richardchan.blackjack.model.GameResult;
 
 @Service
 public class CardCalculatorService {
+    private final int TOP_SCORE = 21;
     private Logger logger = LoggerFactory.getLogger(CardCalculatorService.class);
 
     private int getCardValue(String card, int total) {
         if (FaceCard.isFaceCard(card)) {
             return FaceCard.getFaceCardValue();
         } else if (card.equals("A")) {
-            int aceValue = total + 11 >= 21 ? 1 : 11;
+            int aceValue = total + 11 >= TOP_SCORE ? 1 : 11;
             return aceValue;
         } else {
-            return 0;
+            return Integer.parseInt(card);
         }
     }
 
@@ -32,5 +34,19 @@ public class CardCalculatorService {
             total += getCardValue(cardValue, total);
         }
         return total;
+    }
+
+    public boolean isBust(int score) {
+        return score >= TOP_SCORE;
+    }
+
+    public GameResult getWinner(int dealerTotal, int playerTotal) {
+        if (dealerTotal > playerTotal) {
+            return GameResult.LOSE;
+        } else if (dealerTotal < playerTotal) {
+            return GameResult.WIN;
+        } else {
+            return GameResult.PUSH;
+        }
     }
 }
